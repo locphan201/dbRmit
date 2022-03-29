@@ -31,7 +31,6 @@ def customer_main(window):
     active = 0
     scroll_y = 0
     
-    
     while running:
         clock.tick(fps)
         
