@@ -7,9 +7,9 @@ SPACING = (432-IMG_SIZE*COL)/(COL+1)
 
 def product_imgs():
     item_imgs = []
-    items = os.listdir('Images\\Products')
+    items = os.listdir('Resources\\Images\\Products')
     for item in items:
-        img = pg.image.load('Images\\Products\\' + item)
+        img = pg.image.load('Resources\\Images\\Products\\' + item)
         img = pg.transform.scale(img, (IMG_SIZE, IMG_SIZE))
         item_imgs.append(img)
     return item_imgs
