@@ -14,6 +14,11 @@ def draw_page(window, pages, active, scroll_y):
     if active == 0:
         draw_homepage(window, scroll_y)
 
+    font = pg.font.SysFont('Arial', 20)
+    pg.draw.rect(window, (150, 150, 150), (0, 0, 432, 50))
+    txt = font.render(pages[active], True, (0, 0, 0))
+    window.blit(txt, (20, 20))
+
 def background(window):
     window.fill((207, 238, 250))
 
