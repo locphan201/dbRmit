@@ -2,7 +2,7 @@ from login import *
 from customer import *
 
 def main():
-    if login_init():
+    if True or login_init():
         customer_init()
     
 if __name__ == '__main__':

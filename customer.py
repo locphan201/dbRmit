@@ -1,6 +1,7 @@
 import pygame as pg
 from homepage import *
 from product import *
+from cart import *
 from about_us import *
 from theme import *
 
@@ -12,6 +13,8 @@ def draw_page(window, pages, active, scroll_y, back, nxt):
         scroll_y = 0
     elif active == 1:
         draw_product_page(window, scroll_y)
+    elif active == 2:
+        draw_cart(window)
     elif active == 5:
         scroll_y = draw_about_us(window, scroll_y)
 

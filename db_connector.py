@@ -45,5 +45,3 @@ def check_signup_db(info):
     else:
         mydb, cursor = disconnect_db(mydb, cursor)
         return False
-    
-    
