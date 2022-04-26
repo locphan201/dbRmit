@@ -15,12 +15,12 @@ def draw_page(window, pages, active, scroll_y, back, nxt):
     elif active == 5:
         scroll_y = draw_about_us(window, scroll_y)
 
-    font = pg.font.SysFont('Arial', 20)
     pg.draw.rect(window, GREY, (0, 0, 432, 100))
-    font4 = pg.font.Font(font1,50)
-    header = font4.render("Nana's Bakery", True, BLACK)
+    h_font = pg.font.Font(font1,50)
+    header = h_font.render("Nana's Bakery", True, BLACK)
     window.blit(header, (100,0))
     
+    font = pg.font.SysFont('Arial', 20)
     #Previous page
     if active >= 1:
         txt = font.render(pages[active-1], True, (50, 50, 50))
