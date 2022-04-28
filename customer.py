@@ -3,6 +3,7 @@ from homepage import *
 from product import *
 from cart import *
 from about_us import *
+from personal_info import *
 from theme import *
 
 def draw_page(window, pages, active, scroll_y, back, nxt):
@@ -15,8 +16,10 @@ def draw_page(window, pages, active, scroll_y, back, nxt):
         draw_product_page(window, scroll_y)
     elif active == 2:
         draw_cart(window)
-    elif active == 5:
+    elif active == 4:
         scroll_y = draw_about_us(window, scroll_y)
+    elif active == 5:
+        draw_personal_info(window)
 
     pg.draw.rect(window, GREY, (0, 0, 432, 100))
     h_font = pg.font.Font(font1,50)
@@ -52,7 +55,7 @@ def customer_main(window):
     clock = pg.time.Clock()
     fps = 60
     back, nxt = pg.Rect(40, 0, 100, 50), pg.Rect(290, 0, 100, 50)
-    pages = ['Homepage', 'Products', 'Cart', 'Checkout', 'Order', 'About us']
+    pages = ['Homepage', 'Products', 'Cart', 'Order', 'About us', 'Personal Info']
     active = 0
     scroll_y = 0
     
@@ -68,8 +71,21 @@ def customer_main(window):
                 break
             
             if event.type == pg.MOUSEBUTTONDOWN:
-                if event.button == 4: scroll_y = min(scroll_y + 15, 0)
-                if event.button == 5: scroll_y = max(scroll_y - 15, -768)
+                if active == 1:
+                    if event.button == 1:
+                        item = check_hit_product(scroll_y, event.pos[0], event.pos[1])
+                        if item != []:    
+                            add_item(item[0], item[1])
+                    if event.button == 4: scroll_y = min(scroll_y + 15, 0)
+                    if event.button == 5: scroll_y = max(scroll_y - 15, -768)
+                
+                if active == 2:
+                    button, i = check_hit_button(event.pos[0], event.pos[1])
+                    if button == -1:
+                        update_one(i, -1)
+                    elif button == 1:
+                        update_one(i, 1)
+                
                 if event.button == 1:
                     if back.collidepoint(event.pos):
                         active = max(active - 1, 0)
@@ -77,11 +93,13 @@ def customer_main(window):
                     if nxt.collidepoint(event.pos):
                         active = min(active + 1, len(pages)-1)
                         scroll_y = 0
+             
         pg.display.update()   
     pg.quit()
 
-def customer_init():
+def customer_init(info):
     pg.init()
+    get_info(info)
     WIDTH, HEIGHT = 432, 768
     window = pg.display.set_mode((WIDTH, HEIGHT))
     pg.display.set_caption('Nana\'s Bakery')

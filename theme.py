@@ -1,4 +1,5 @@
 # Basic Colors
+LIGHT_RED = (250, 62, 62)
 RED    = (255,   0,   0)
 PINK   = (244, 194, 194)
 BLACK  = (  0,   0,   0)

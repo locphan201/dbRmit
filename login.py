@@ -147,7 +147,6 @@ def login_main(window):
                         active = 1
                         clear_text(login_boxes)
                     elif check_signup(signup_boxes):
-                        print('Sign Up Successful')
                         active = 0
                         login_boxes[1][2] = signup_boxes[2][2]
                         clear_text(signup_boxes)
@@ -190,7 +189,6 @@ def login_main(window):
                                 signup_boxes[0] += 1
                         elif event.key == pg.K_KP_ENTER:
                             if check_signup(signup_boxes):
-                                print('Sign Up Successful')
                                 active = 0
                                 login_boxes[1][2] = signup_boxes[2][2]
                                 clear_text(signup_boxes)
@@ -205,7 +203,7 @@ def login_main(window):
         pg.display.update()    
     pg.quit()
     
-    return isConnected
+    return isConnected, get_user_info(login_boxes[1][2])
 
 def login_init():
     pg.init()

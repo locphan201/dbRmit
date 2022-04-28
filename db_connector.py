@@ -37,7 +37,7 @@ def check_signup_db(info):
     result = cursor.fetchall()
     if len(result) == 0:
         query = """INSERT INTO Customers (cname, cphone, caddress, cemail, cpwd) VALUES (%s,%s,%s,%s,%s);"""
-        val = (info[0], info[1], info[2], info[3], info[4])
+        val = (info[0].capitalize(), info[1], info[2], info[3], info[4])
         cursor.execute(query, val)
         mydb.commit()
         mydb, cursor = disconnect_db(mydb, cursor)
@@ -45,3 +45,11 @@ def check_signup_db(info):
     else:
         mydb, cursor = disconnect_db(mydb, cursor)
         return False
+    
+def get_user_info(account):
+    mydb, cursor = connect_db()
+    query = """SELECT cname, cphone, caddress, cemail FROM Customers WHERE cphone='%s'""" %account
+    cursor.execute(query)
+    result = cursor.fetchall()
+    mydb, cursor = disconnect_db(mydb, cursor)
+    return result[0]
