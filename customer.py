@@ -8,13 +8,14 @@ from db_connector import *
 from theme import *
 
 USER_INFO = []
+ORDER_UPDATE = False
 
 def user_information(account):
     global USER_INFO
     USER_INFO = get_user_info(account)
-    
 
 def draw_page(window, pages, active, scroll_y, back, nxt):
+    global ORDER_UPDATE
     INDENT = 55
     
     if active == 0:
@@ -25,11 +26,12 @@ def draw_page(window, pages, active, scroll_y, back, nxt):
     elif active == 2:
         draw_cart(window)
     elif active == 3:
+        if not ORDER_UPDATE:
+            ORDER_UPDATE = True
+            get_order(USER_INFO[0])
         draw_order_page(window)
     elif active == 4:
         scroll_y = draw_about_us(window, scroll_y)
-    elif active == 5:
-        draw_personal_info(window)
 
     pg.draw.rect(window, LIGHT_RED, (0, 0, 432, 65))
     pg.draw.rect(window, GREY, (0, 65, 432, 35))
@@ -61,20 +63,12 @@ def draw_page(window, pages, active, scroll_y, back, nxt):
 def background(window):
     window.fill(BACKGROUND)
 
-def draw_personal_info(window):
-    global USER_INFO
-    font = pg.font.SysFont('Arial', 20)
-    
-    for i in range(1, len(USER_INFO)):
-        txt = font.render(USER_INFO[i], True, (0, 0, 0))
-        window.blit(txt, (30, i*50+150))
-
 def customer_main(window):
     running = True
     clock = pg.time.Clock()
     fps = 60
     back, nxt = pg.Rect(40, 0, 100, 50), pg.Rect(290, 0, 100, 50)
-    pages = ['Homepage', 'Products', 'Cart', 'Order', 'About us', 'Personal Info']
+    pages = ['Homepage', 'Products', 'Cart', 'Order', 'About us']
     active = 0
     scroll_y = 0
     
@@ -90,7 +84,11 @@ def customer_main(window):
                 break
             
             if event.type == pg.MOUSEBUTTONDOWN:
-                if active == 1:
+                if active == 0:
+                    if check_event_homepage(event.pos[0], event.pos[1]):
+                        active = 1
+                
+                elif active == 1:
                     if event.button == 1:
                         item = check_hit_product(scroll_y, event.pos[0], event.pos[1])
                         if item != []:    
@@ -98,7 +96,7 @@ def customer_main(window):
                     if event.button == 4: scroll_y = min(scroll_y + 15, 0)
                     if event.button == 5: scroll_y = max(scroll_y - 15, -768)
                 
-                if active == 2:
+                elif active == 2:
                     button, i = check_hit_button(event.pos[0], event.pos[1])
                     if button == -1:
                         update_one(i, -1)
@@ -107,6 +105,9 @@ def customer_main(window):
                     elif button == 2:
                         cart_checkout(get_items(), USER_INFO[0])
                         remove_all()
+                
+                elif active == 3:
+                    check_order_events(event.pos[0], event.pos[1])
                 
                 if event.button == 1:
                     if back.collidepoint(event.pos):

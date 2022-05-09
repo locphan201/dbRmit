@@ -55,6 +55,14 @@ def get_user_info(account):
     mydb, cursor = disconnect_db(mydb, cursor)
     return result[0]
 
+def get_best_seller():
+    mydb, cursor = connect_db()
+    query = """SELECT pname FROM products P, contains C WHERE P.pID = C.pID GROUP BY pname ORDER BY SUM(quantity) DESC LIMIT 4"""
+    cursor.execute(query)
+    result = cursor.fetchall()
+    mydb, cursor = disconnect_db(mydb, cursor)
+    return result
+
 def get_product_infos():
     mydb, cursor = connect_db()
     query = """SELECT pname, price FROM Products"""
@@ -85,8 +93,40 @@ def cart_checkout(items, customer):
     
 def get_order_info(customer):
     mydb, cursor = connect_db()
-    query = """SELECT oID, date, price, type FROM Orders WHERE cID = %s""" %customer
+    query = """SELECT MAX(oID), date, price, type FROM Orders WHERE cID = %s""" %customer
     cursor.execute(query)
-    result = cursor.fetchall()
+    order = cursor.fetchall()
+    oID = order[0][0]
+    query = """SELECT pname, quantity, price FROM products P, contains C WHERE P.pID = C.pID AND C.oID = %s;""" %oID
+    cursor.execute(query)
+    items = cursor.fetchall()
     mydb, cursor = disconnect_db(mydb, cursor)
-    return result
+    return order[0], items
+
+def get_previous_orders(customer, oID):
+    mydb, cursor = connect_db()
+    query = """SELECT MAX(oID), date, price, type FROM Orders WHERE cID = %s AND oID < %s""" %(customer, oID)
+    cursor.execute(query)
+    order = cursor.fetchall()
+    oID = order[0][0]
+    if oID == None:
+        return None, None
+    query = """SELECT pname, quantity, price FROM products P, contains C WHERE P.pID = C.pID AND C.oID = %s;""" %oID
+    cursor.execute(query)
+    items = cursor.fetchall()
+    mydb, cursor = disconnect_db(mydb, cursor)
+    return order[0], items
+
+def get_next_orders(customer, oID):
+    mydb, cursor = connect_db()
+    query = """SELECT MIN(oID), date, price, type FROM Orders WHERE cID = %s AND oID > %s""" %(customer, oID)
+    cursor.execute(query)
+    order = cursor.fetchall()
+    oID = order[0][0]
+    if oID == None:
+        return None, None
+    query = """SELECT pname, quantity, price FROM products P, contains C WHERE P.pID = C.pID AND C.oID = %s;""" %oID
+    cursor.execute(query)
+    items = cursor.fetchall()
+    mydb, cursor = disconnect_db(mydb, cursor)
+    return order[0], items

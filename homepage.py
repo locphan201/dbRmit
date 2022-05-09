@@ -1,5 +1,9 @@
 import pygame as pg
 from theme import *
+from db_connector import *
+
+BEST_SELLERS = get_best_seller()
+BUTTON = pg.Rect(300, 270, 80, 30)
 
 def get_open_time():
     return ['Time: ', '8am - 9pm ', 'from Monday to Saturday']
@@ -16,6 +20,31 @@ def get_contact():
     contact.append('Email: Nanabakery@gmail.com')
     return contact
 
+def draw_best_sellers(window):
+    global BEST_SELLERS
+    
+    for i in range(len(BEST_SELLERS)):
+        img = pg.image.load('Resources\\Images\\Products\\' + BEST_SELLERS[i][0].lower().replace(' ', '_') + '.jpg')
+        img = pg.transform.scale(img, (150,150))
+        if i <= 1:
+            window.blit(img, (i*194+44, 313))
+        else:
+            window.blit(img, ((i-2)*194+44, 507))
+
+def check_event_homepage(x, y):
+    if BUTTON.collidepoint(x, y):
+        return True
+
+def draw_button(window):
+    global BUTTON
+    pg.draw.rect(window, LIGHT_RED, BUTTON)
+    pg.draw.circle(window, LIGHT_RED, (BUTTON.x, BUTTON.y+BUTTON.h/2), 15)
+    pg.draw.circle(window, LIGHT_RED, (BUTTON.x+BUTTON.w, BUTTON.y+BUTTON.h/2), 15)
+    
+    font = pg.font.SysFont('Arial', 17)
+    txt = font.render('See more', True, WHITE)
+    window.blit(txt, (BUTTON.x+BUTTON.w/2-txt.get_width()/2, BUTTON.y+BUTTON.h/2-txt.get_height()/2))
+
 def draw_homepage(window):
     # Set fonts
     title = pg.font.Font(font2, 25)
@@ -23,8 +52,7 @@ def draw_homepage(window):
     paragraph =  pg.font.Font(font2, 20)
     
     # Setup texts
-    best_seller = header.render('Best seller of the week:', True, BLACK)
-    seasonal_product = header.render('Seasonal product:', True, BLACK)
+    best_seller = header.render('Best seller:', True, BLACK)
     welcome = title.render('Welcome to Nana\'s Bakery', True, BLACK)
     slogan = paragraph.render('Bake with love', True, BLACK)
     time = get_open_time()
@@ -54,8 +82,9 @@ def draw_homepage(window):
             window.blit(paragraph.render(location[i], True, BLACK), (220, 200+(i-1)*20))  
     
     # Recomendation
-    window.blit(best_seller, (0, 250))
-    window.blit(seasonal_product, (0,500))
+    window.blit(best_seller, (20, 270))
+    draw_button(window)
+    draw_best_sellers(window)
     
     # Contact us
     pg.draw.rect(window,PINK,(0,700,432,70))
