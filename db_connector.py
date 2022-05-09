@@ -61,3 +61,15 @@ def get_product_infos():
     result = cursor.fetchall()
     mydb, cursor = disconnect_db(mydb, cursor)
     return result
+
+def cart_checkout(items):
+    mydb, cursor = connect_db()
+    for item in items:
+        query = """SELECT pname, price FROM Products WHERE pid=%s""" %item[0]
+        cursor.execute(query)
+        result = cursor.fetchall()
+        query = """INSERT INTO Orders (cphone, pname, price) VALUES (%s,%s,%s);"""
+        val = (item[1], result[0][0], result[0][1])
+        cursor.execute(query, val)
+    mydb.commit()
+    mydb, cursor = disconnect_db(mydb, cursor)

@@ -3,8 +3,15 @@ from homepage import *
 from product import *
 from cart import *
 from about_us import *
-from personal_info import *
+from db_connector import *
 from theme import *
+
+USER_INFO = []
+
+def user_information(account):
+    global USER_INFO
+    USER_INFO = get_user_info(account)
+    
 
 def draw_page(window, pages, active, scroll_y, back, nxt):
     INDENT = 55
@@ -21,9 +28,10 @@ def draw_page(window, pages, active, scroll_y, back, nxt):
     elif active == 5:
         draw_personal_info(window)
 
-    pg.draw.rect(window, GREY, (0, 0, 432, 100))
+    pg.draw.rect(window, LIGHT_RED, (0, 0, 432, 65))
+    pg.draw.rect(window, GREY, (0, 65, 432, 35))
     h_font = pg.font.Font(font1,50)
-    header = h_font.render("Nana's Bakery", True, BLACK)
+    header = h_font.render('Nana\'s Bakery', True, BLACK)
     window.blit(header, (100,0))
     
     font = pg.font.SysFont('Arial', 20)
@@ -49,6 +57,15 @@ def draw_page(window, pages, active, scroll_y, back, nxt):
 
 def background(window):
     window.fill(BACKGROUND)
+
+def draw_personal_info(window):
+    global USER_INFO
+    font = pg.font.SysFont('Arial', 20)
+    
+    for i in range(len(USER_INFO)):
+        txt = font.render(USER_INFO[i], True, (0, 0, 0))
+        window.blit(txt, (30, i*50+150))
+
 
 def customer_main(window):
     running = True
@@ -93,13 +110,13 @@ def customer_main(window):
                     if nxt.collidepoint(event.pos):
                         active = min(active + 1, len(pages)-1)
                         scroll_y = 0
-             
         pg.display.update()   
+        
     pg.quit()
 
 def customer_init(info):
     pg.init()
-    get_info(info)
+    user_information(7534872145)
     WIDTH, HEIGHT = 432, 768
     window = pg.display.set_mode((WIDTH, HEIGHT))
     pg.display.set_caption('Nana\'s Bakery')

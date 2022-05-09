@@ -33,8 +33,8 @@ def draw_product_page(window, scroll_y):
     
     for i in range(len(items)):
         window.blit(items[i][1], (30, scroll_y+150 + i*125))
-        window.blit(font.render(items[i][0], True, BLACK), (165, scroll_y+175 + i*125))
-        window.blit(font.render('$ ' + str(items[i][3]), True, BLACK), (325, scroll_y+175 + i*125 + 40))
+        window.blit(font.render(items[i][0], True, BLACK), (165, scroll_y+175 + i*120))
+        window.blit(font.render('$ ' + str(items[i][3]), True, BLACK), (325, scroll_y+175 + i*120 + 40))
         
         if items[i][2] > 0:
             pg.draw.circle(window, LIGHT_RED, (35, scroll_y+155 + i*125), 15)
