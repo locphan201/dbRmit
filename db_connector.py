@@ -53,3 +53,11 @@ def get_user_info(account):
     result = cursor.fetchall()
     mydb, cursor = disconnect_db(mydb, cursor)
     return result[0]
+
+def get_product_infos():
+    mydb, cursor = connect_db()
+    query = """SELECT pname, price FROM Products"""
+    cursor.execute(query)
+    result = cursor.fetchall()
+    mydb, cursor = disconnect_db(mydb, cursor)
+    return result

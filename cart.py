@@ -80,6 +80,6 @@ def draw_cart(window):
         txt, pos = modify(amount_font, "-", sub[i].x+5, sub[i].y+3, WHITE)
         window.blit(txt, pos)
     
-    window.blit(item_font.render("Total", True, BLACK), (30, 175+50*(len(items)+1)))
-    txt, pos = modify(amount_font, str(sum()), 375, 185+50*(len(items)+1))
+    window.blit(item_font.render("Total", True, BLACK), (30, 680))
+    txt, pos = modify(amount_font, str(sum()), 375, 680)
     window.blit(txt, pos)

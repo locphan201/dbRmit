@@ -1,3 +1,0 @@
-USE nana_bakery;
-CREATE TABLE IF NOT EXISTS Products( p_id INTEGER AUTO_INCREMENT, p_name VARCHAR(100), p_price DECIMAL, p_quantity INTEGER, p_type VARCHAR(100), PRIMARY KEY (p_id) );
-INSERT INTO Products (p_name, p_price, p_quantity, p_type) VALUES ('Sponge Cake', 35000, 10, 'Sponge cake'), ('Cheese Sponge Cake',40000, 10, 'Sponge cake'), ('Salted Egg Sponge Cake',42000, 20, 'Sponge cake'), ('Egg Tart', 20000, 24, 'Pastry'), ('Croissant', 12000, 12, 'Pastry'), ('Chocolate Croissant', 18000, 10, 'Pastry'), ('Cheese Croissant', 15000, 20, 'Pastry'), ('Pate Chaud', 23000, 10, 'Pastry'), ('Choux', 15000, 11, 'Dessert'), ('Chocolate Choux', 17000, 7, 'Dessert'), ('Madeleine', 15000, 15, 'Dessert');
