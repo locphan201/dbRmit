@@ -122,7 +122,7 @@ def customer_main(window):
 
 def customer_init(info):
     pg.init()
-    user_information(7534872145)
+    user_information(info)
     WIDTH, HEIGHT = 432, 768
     window = pg.display.set_mode((WIDTH, HEIGHT))
     pg.display.set_caption('Nana\'s Bakery')

@@ -97,6 +97,8 @@ def get_order_info(customer):
     cursor.execute(query)
     order = cursor.fetchall()
     oID = order[0][0]
+    if oID == None:
+        return None, None
     query = """SELECT pname, quantity, price FROM products P, contains C WHERE P.pID = C.pID AND C.oID = %s;""" %oID
     cursor.execute(query)
     items = cursor.fetchall()

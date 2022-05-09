@@ -111,7 +111,7 @@ def login_main(window):
             show_msg(window, lg_y, msg)
         else:
             draw_signup(window, sg_y, signup_boxes, login_button[1], signup_button[1])
-            show_msg(window, sg_y, msg)
+            show_msg(window, sg_y+230, msg)
         
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -148,6 +148,7 @@ def login_main(window):
                         clear_text(login_boxes)
                     elif check_signup(signup_boxes):
                         active = 0
+                        msg = ''
                         login_boxes[1][2] = signup_boxes[2][2]
                         clear_text(signup_boxes)
                     else:
@@ -203,7 +204,7 @@ def login_main(window):
         pg.display.update()    
     pg.quit()
     
-    return isConnected, get_user_info(login_boxes[1][2])
+    return isConnected, login_boxes[1][2]
 
 def login_init():
     pg.init()
