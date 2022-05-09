@@ -1,6 +1,5 @@
 import pygame as pg
 from theme import *
-from db_connector import *
 
 items = []
 add, sub = [], []
@@ -42,6 +41,10 @@ def remove_all():
     global items, add, sub
     items, add, sub = [], [], []
 
+def get_items():
+    global items
+    return [items, sum()]
+
 def check_hit_button(x, y):
     global add, sub, button
     
@@ -57,8 +60,6 @@ def check_hit_button(x, y):
             return -1, i
     
     if button.collidepoint(x, y):
-        ## Checkout
-        remove_all()
         return 2, 0
     
     return 0, 1

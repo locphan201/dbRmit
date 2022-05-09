@@ -1,4 +1,5 @@
 import mysql.connector
+import datetime
 
 def connect_db():
     mydb = mysql.connector.connect(
@@ -48,7 +49,7 @@ def check_signup_db(info):
     
 def get_user_info(account):
     mydb, cursor = connect_db()
-    query = """SELECT cname, cphone, caddress, cemail FROM Customers WHERE cphone='%s'""" %account
+    query = """SELECT cID, cname, cphone, caddress, cemail FROM Customers WHERE cphone='%s'""" %account
     cursor.execute(query)
     result = cursor.fetchall()
     mydb, cursor = disconnect_db(mydb, cursor)
@@ -62,14 +63,22 @@ def get_product_infos():
     mydb, cursor = disconnect_db(mydb, cursor)
     return result
 
-def cart_checkout(items):
+def get_current_time():
+    return datetime.datetime.now().strftime('%Y-%m-%d')
+
+def cart_checkout(items, customer):
     mydb, cursor = connect_db()
-    for item in items:
-        query = """SELECT pname, price FROM Products WHERE pid=%s""" %item[0]
+    date = get_current_time()
+    query = """INSERT INTO Orders (cID, date, price) VALUES (%s, \'%s\', %s)""" %(customer, date, items[1])
+    cursor.execute(query)
+    query = """SELECT MAX(oID) FROM Orders WHERE cID = %s""" %customer
+    cursor.execute(query)
+    oID = cursor.fetchall()[0][0]
+    for item in items[0]:
+        query = """SELECT pID FROM Products WHERE pname = \'%s\'""" %item[0]
         cursor.execute(query)
-        result = cursor.fetchall()
-        query = """INSERT INTO Orders (cphone, pname, price) VALUES (%s,%s,%s);"""
-        val = (item[1], result[0][0], result[0][1])
-        cursor.execute(query, val)
+        pID = cursor.fetchall()[0][0]
+        query = """INSERT INTO Contains (oID, pID, quantity) VALUES (%s, %s, %s)""" %(oID, pID, item[1])
+        cursor.execute(query)
     mydb.commit()
     mydb, cursor = disconnect_db(mydb, cursor)

@@ -62,7 +62,7 @@ def draw_personal_info(window):
     global USER_INFO
     font = pg.font.SysFont('Arial', 20)
     
-    for i in range(len(USER_INFO)):
+    for i in range(1, len(USER_INFO)):
         txt = font.render(USER_INFO[i], True, (0, 0, 0))
         window.blit(txt, (30, i*50+150))
 
@@ -102,6 +102,9 @@ def customer_main(window):
                         update_one(i, -1)
                     elif button == 1:
                         update_one(i, 1)
+                    elif button == 2:
+                        cart_checkout(get_items(), USER_INFO[0])
+                        remove_all()
                 
                 if event.button == 1:
                     if back.collidepoint(event.pos):
