@@ -69,7 +69,7 @@ def get_current_time():
 def cart_checkout(items, customer):
     mydb, cursor = connect_db()
     date = get_current_time()
-    query = """INSERT INTO Orders (cID, date, price) VALUES (%s, \'%s\', %s)""" %(customer, date, items[1])
+    query = """INSERT INTO Orders (cID, date, price, type) VALUES (%s, \'%s\', %s, 'INCOMPLETED')""" %(customer, date, items[1])
     cursor.execute(query)
     query = """SELECT MAX(oID) FROM Orders WHERE cID = %s""" %customer
     cursor.execute(query)
@@ -82,3 +82,11 @@ def cart_checkout(items, customer):
         cursor.execute(query)
     mydb.commit()
     mydb, cursor = disconnect_db(mydb, cursor)
+    
+def get_order_info(customer):
+    mydb, cursor = connect_db()
+    query = """SELECT oID, date, price, type FROM Orders WHERE cID = %s""" %customer
+    cursor.execute(query)
+    result = cursor.fetchall()
+    mydb, cursor = disconnect_db(mydb, cursor)
+    return result

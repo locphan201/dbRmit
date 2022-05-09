@@ -2,6 +2,7 @@ import pygame as pg
 from homepage import *
 from product import *
 from cart import *
+from order import *
 from about_us import *
 from db_connector import *
 from theme import *
@@ -23,6 +24,8 @@ def draw_page(window, pages, active, scroll_y, back, nxt):
         draw_product_page(window, scroll_y)
     elif active == 2:
         draw_cart(window)
+    elif active == 3:
+        draw_order_page(window)
     elif active == 4:
         scroll_y = draw_about_us(window, scroll_y)
     elif active == 5:
@@ -65,7 +68,6 @@ def draw_personal_info(window):
     for i in range(1, len(USER_INFO)):
         txt = font.render(USER_INFO[i], True, (0, 0, 0))
         window.blit(txt, (30, i*50+150))
-
 
 def customer_main(window):
     running = True

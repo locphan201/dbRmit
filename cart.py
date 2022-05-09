@@ -3,7 +3,7 @@ from theme import *
 
 items = []
 add, sub = [], []
-button = pg.Rect(55, 710, 322, 50)
+button = pg.Rect(55, 705, 322, 50)
 
 def sum():
     global items
@@ -12,10 +12,10 @@ def sum():
         total += items[i][1] * items[i][2]
     return total
 
-def modify(font, text, x, y, color=BLACK):
+def show(window, font, text, x, y, color=BLACK):
     txt = font.render(text, True, color)
     rect = txt.get_rect(center=(x, y))
-    return txt, (rect.x, rect.y)
+    window.blit(txt, (rect.x, rect.y))
 
 def add_item(name, price):
     global items, add, sub
@@ -60,6 +60,8 @@ def check_hit_button(x, y):
             return -1, i
     
     if button.collidepoint(x, y):
+        if len(items) <= 0:
+            return 0, 1
         return 2, 0
     
     return 0, 1
@@ -80,27 +82,21 @@ def draw_cart(window):
     if len(items) > 0:
         for i in range(len(items)):
             window.blit(item_font.render(str(items[i][0]), True, BLACK), (30, 175+50*i))
-            txt, pos = modify(amount_font, str(items[i][1]), 260, 185+50*i)
-            window.blit(txt, pos)
-            txt, pos = modify(amount_font, '$' + str(items[i][1]*items[i][2]), 375, 185+50*i)
-            window.blit(txt, pos)
+            show(window, amount_font, str(items[i][1]), 260, 185+50*i)
+            show(window, amount_font, '$' + str(items[i][1]*items[i][2]), 375, 185+50*i)
     
         for i in range(len(add)):
             pg.draw.rect(window, BLACK, add[i])
-            txt, pos = modify(amount_font, "+", add[i].x+5, add[i].y+3, WHITE)
-            window.blit(txt, pos)
+            show(window, amount_font, "+", add[i].x+5, add[i].y+3, WHITE)
             pg.draw.rect(window, BLACK, sub[i])
-            txt, pos = modify(amount_font, "-", sub[i].x+5, sub[i].y+3, WHITE)
-            window.blit(txt, pos)
+            show(window, amount_font, "-", sub[i].x+5, sub[i].y+3, WHITE)
     else:
-        window.blit(TAG.render("Cart is empty", True, BLACK), (160, 420))
+        show(window, TAG, "Cart is empty", 216, 350)
     
-    window.blit(item_font.render("Total", True, BLACK), (30, 680))
-    txt, pos = modify(amount_font, '$' + str(sum()), 375, 680)
-    window.blit(txt, pos)
+    show(window, item_font, "Total", 50, 670)
+    show(window, amount_font, '$' + str(sum()), 380, 670)
     
     pg.draw.rect(window, LIGHT_RED, button)
     pg.draw.circle(window, LIGHT_RED, (button.x, button.y+button.h/2), button.h/2)
     pg.draw.circle(window, LIGHT_RED, (button.x+button.w, button.y+button.h/2), button.h/2)
-    txt, pos = modify(TAG, 'Checkout', button.x+button.w/2, button.y+button.h/2, WHITE)
-    window.blit(txt, pos)
+    show(window, TAG, 'Checkout', button.x+button.w/2, button.y+button.h/2, WHITE)
