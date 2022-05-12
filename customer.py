@@ -103,8 +103,13 @@ def customer_main(window):
                     elif button == 1:
                         update_one(i, 1)
                     elif button == 2:
-                        cart_checkout(get_items(), USER_INFO[0])
-                        remove_all()
+                        items = get_items()
+                        if items[1] != 0:
+                            cart_checkout(items, USER_INFO[0])
+                            get_order(USER_INFO[0])
+                            remove_all()
+                            remove_quantities()
+                            active = 3
                 
                 elif active == 3:
                     check_order_events(event.pos[0], event.pos[1])

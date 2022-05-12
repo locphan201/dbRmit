@@ -24,7 +24,15 @@ def check_login(account, password):
     result = cursor.fetchall()
     mydb, cursor = disconnect_db(mydb, cursor)
     if len(result) == 0:
-        return False
+        mydb, cursor = connect_db()
+        query = """SELECT cpwd FROM Customers WHERE cemail='%s'""" %account
+        cursor.execute(query)
+        result = cursor.fetchall()
+        mydb, cursor = disconnect_db(mydb, cursor)
+        if len(result) == 0:
+            return False
+        else:
+            return result[0][0] == password
     else:
         return result[0][0] == password
     
@@ -53,6 +61,12 @@ def get_user_info(account):
     cursor.execute(query)
     result = cursor.fetchall()
     mydb, cursor = disconnect_db(mydb, cursor)
+    if len(result) == 0:
+        mydb, cursor = connect_db()
+        query = """SELECT cID, cname, cphone, caddress, cemail FROM Customers WHERE cemail='%s'""" %account
+        cursor.execute(query)
+        result = cursor.fetchall()
+        mydb, cursor = disconnect_db(mydb, cursor)
     return result[0]
 
 def get_best_seller():
@@ -79,7 +93,7 @@ def cart_checkout(items, customer):
     date = get_current_time()
     query = """INSERT INTO Orders (cID, date, price, type) VALUES (%s, \'%s\', %s, 'INCOMPLETED')""" %(customer, date, items[1])
     cursor.execute(query)
-    query = """SELECT MAX(oID) FROM Orders WHERE cID = %s""" %customer
+    query = """SELECT oID FROM Orders WHERE cID = %s ORDER BY oID DESC LIMIT 1;""" %customer
     cursor.execute(query)
     oID = cursor.fetchall()[0][0]
     for item in items[0]:
@@ -90,12 +104,14 @@ def cart_checkout(items, customer):
         cursor.execute(query)
     mydb.commit()
     mydb, cursor = disconnect_db(mydb, cursor)
-    
+ 
 def get_order_info(customer):
     mydb, cursor = connect_db()
-    query = """SELECT MAX(oID), date, price, type FROM Orders WHERE cID = %s""" %customer
+    query = """SELECT oID, date, price, type FROM Orders WHERE cID = %s ORDER BY oID DESC LIMIT 1;""" %customer
     cursor.execute(query)
     order = cursor.fetchall()
+    if order == []:
+        return None, None
     oID = order[0][0]
     if oID == None:
         return None, None
@@ -107,9 +123,11 @@ def get_order_info(customer):
 
 def get_previous_orders(customer, oID):
     mydb, cursor = connect_db()
-    query = """SELECT MAX(oID), date, price, type FROM Orders WHERE cID = %s AND oID < %s""" %(customer, oID)
+    query = """SELECT oID, date, price, type FROM Orders WHERE cID = %s AND oID < %s ORDER BY oID DESC LIMIT 1; """ %(customer, oID)
     cursor.execute(query)
     order = cursor.fetchall()
+    if order == []:
+        return None, None
     oID = order[0][0]
     if oID == None:
         return None, None
@@ -121,9 +139,11 @@ def get_previous_orders(customer, oID):
 
 def get_next_orders(customer, oID):
     mydb, cursor = connect_db()
-    query = """SELECT MIN(oID), date, price, type FROM Orders WHERE cID = %s AND oID > %s""" %(customer, oID)
+    query = """SELECT oID, date, price, type FROM Orders WHERE cID = %s AND oID > %s ORDER BY oID ASC LIMIT 1; """ %(customer, oID)
     cursor.execute(query)
     order = cursor.fetchall()
+    if order == []:
+        return None, None
     oID = order[0][0]
     if oID == None:
         return None, None
@@ -131,4 +151,4 @@ def get_next_orders(customer, oID):
     cursor.execute(query)
     items = cursor.fetchall()
     mydb, cursor = disconnect_db(mydb, cursor)
-    return order[0], items
+    return order[0], items 

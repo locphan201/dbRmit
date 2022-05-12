@@ -26,6 +26,11 @@ def update_one(index, quantity):
     global items
     items[index][2] += quantity
 
+def remove_quantities():
+    global items
+    for i in items:
+        i[2] = 0
+
 def draw_product_page(window, scroll_y):
     global items
     

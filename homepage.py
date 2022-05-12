@@ -23,6 +23,7 @@ def get_contact():
 def draw_best_sellers(window):
     global BEST_SELLERS
     
+    BEST_SELLERS = get_best_seller()
     for i in range(len(BEST_SELLERS)):
         img = pg.image.load('Resources\\Images\\Products\\' + BEST_SELLERS[i][0].lower().replace(' ', '_') + '.jpg')
         img = pg.transform.scale(img, (150,150))
