@@ -2,6 +2,15 @@ import mysql.connector
 import datetime
 
 def connect_db():
+    # mydb = mysql.connector.connect(
+    #     host="eu-cdbr-west-02.cleardb.net",
+    #     user="b03249ea8f4171",
+    #     password="4bf170a0"
+    # )
+    # cursor = mydb.cursor()
+    # db = "USE heroku_6424eae9f05fcc3;"
+    # cursor.execute(db)
+    
     mydb = mysql.connector.connect(
         host="localhost",
         user="root",
@@ -10,6 +19,7 @@ def connect_db():
     cursor = mydb.cursor()
     db = "USE nanasbakery;"
     cursor.execute(db)
+    
     return mydb, cursor
 
 def disconnect_db(mydb, cursor):

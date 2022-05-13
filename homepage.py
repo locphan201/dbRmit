@@ -23,7 +23,6 @@ def get_contact():
 def draw_best_sellers(window):
     global BEST_SELLERS
     
-    BEST_SELLERS = get_best_seller()
     for i in range(len(BEST_SELLERS)):
         img = pg.image.load('Resources\\Images\\Products\\' + BEST_SELLERS[i][0].lower().replace(' ', '_') + '.jpg')
         img = pg.transform.scale(img, (150,150))
@@ -46,11 +45,16 @@ def draw_button(window):
     txt = font.render('See more', True, WHITE)
     window.blit(txt, (BUTTON.x+BUTTON.w/2-txt.get_width()/2, BUTTON.y+BUTTON.h/2-txt.get_height()/2))
 
+def update_best_sellers():
+    global BEST_SELLERS
+    BEST_SELLERS = get_best_seller()
+
 def draw_homepage(window):
     # Set fonts
     title = pg.font.Font(font2, 25)
     header = pg.font.Font(font3, 25)
     paragraph =  pg.font.Font(font2, 20)
+    fcontact = pg.font.SysFont('Arial', 18)
     
     # Setup texts
     best_seller = header.render('Best seller:', True, BLACK)
@@ -90,4 +94,4 @@ def draw_homepage(window):
     # Contact us
     pg.draw.rect(window,PINK,(0,700,432,70))
     for i in range(len(contact)):
-        window.blit(paragraph.render(contact[i], True, BLACK), (0, 700+i*25))
+        window.blit(fcontact.render(contact[i], True, BLACK), (0, 700+i*25))

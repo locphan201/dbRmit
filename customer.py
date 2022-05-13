@@ -109,6 +109,7 @@ def customer_main(window):
                             get_order(USER_INFO[0])
                             remove_all()
                             remove_quantities()
+                            update_best_sellers()
                             active = 3
                 
                 elif active == 3:
